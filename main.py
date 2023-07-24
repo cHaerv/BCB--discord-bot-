@@ -1,14 +1,43 @@
+#dependancies 
+
+
+import asyncio
 import discord 
+import os
+
 from discord.ext import commands
+from webbrowser import get
 
-client = commands.Bot(command_prefix = '!', intents=discord.Intents.all())
+#keys for api's
+from apiKeys import *
 
+intents = discord.Intents.all()
+intents.members = True
+
+client = commands.Bot(command_prefix = '!', intents=intents)
+
+
+#console log when running
 @client.event
 async def on_ready():
-    print("im ready, im ready!")
+    await client.change_presence(status=discord.Status.online, activity=discord.Game("mind yer own"))
+    print("I'm ready, I'm ready!")
 
-@client.command()
-async def hello(ctx):
-    await ctx.send("alright am ya?")
+cog_extensions = []
 
-client.run('MTEzMDgyODUxMDQ4NzkyNDc3Nw.Gj9uP1.WeiuPjdvZPDMlCQ8YvQS6vP4AV3XSR6eF7H4Tk')
+async def load_extensions():
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            cog_extensions.append("cogs." + filename[:-3])
+
+    if __name__ == '__main__':
+        for extension in cog_extensions:
+            await client.load_extension(extension)
+
+
+async def main():
+    async with client:
+        await load_extensions()
+        await client.start(bot_token)
+
+asyncio.run(main())

@@ -12,9 +12,9 @@ class Quiz(commands.Cog):
 
     @commands.command()
     async def true_false(self, ctx):
-        # url_params = ctx.message.content.split(" ")[1]
+        difficulty = ctx.message.content.split(" ")[1] if len(ctx.message.content.split(" ")) == 2  else "medium"
 
-        URL = f"https://opentdb.com/api.php?amount=1&category=9&difficulty=medium&type=boolean"
+        URL = f"https://opentdb.com/api.php?amount=1&category=9&difficulty={difficulty}&type=boolean"
         response = requests.get(URL, headers={'Accept': 'application/json'}).json()
         question = response.get("results")[0]["question"].replace("&quot", "'")
         answer = response.get("results")[0]["correct_answer"]
@@ -30,9 +30,9 @@ class Quiz(commands.Cog):
         else:
             await ctx.send("Yam nearly there but no ya wrong")
 
-    
-
-
+    @commands.command()
+    async def multiple_choice(self, ctx):
+        URL = f""
 
 
 async def setup(client):

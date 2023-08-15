@@ -35,7 +35,7 @@ class Voice(commands.Cog):
     
     @commands.command(parse_context = True)
     async def play(self, ctx):
-        print(ello)
+        print("ello")
 
 
 async def setup(client):

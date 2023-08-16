@@ -1,6 +1,7 @@
 import discord
 import requests
 import random
+import html
 from discord.ext import commands
 
 class Quiz(commands.Cog):
@@ -17,9 +18,9 @@ class Quiz(commands.Cog):
 
         URL = f"https://opentdb.com/api.php?amount=1&category=9&difficulty={difficulty}&type=boolean"
         response = requests.get(URL, headers={'Accept': 'application/json'}).json() # response from requests doing API call for Json data
-        question = response.get("results")[0]["question"].replace("&quot", "'") #parse Json data for the question key
-        answer = response.get("results")[0]["correct_answer"] # parse for correct answer
-        await ctx.send(f"True or False? {question}") #asks question
+        question = html.unescape(response.get("results")[0]["question"]) #.replace("&quot", "'") #parse Json data for the question key
+        answer = html.unescape(response.get("results")[0]["correct_answer"]) # parse for correct answer
+        await ctx.send(f"True or False? {html.unescape(question)}") #asks question
         # print(answer)
         
         # wait for the answer
@@ -37,16 +38,16 @@ class Quiz(commands.Cog):
         difficulty = params[1] if len(params) > 1 else "medium"
         URL = f"https://opentdb.com/api.php?amount=1&difficulty={difficulty}&type=multiple"
         print(params)
-        response = requests.get(URL, headers={'Accept': 'application/json'}).json() 
+        response = requests.get(URL, headers={'Accept': 'application/json'}).json()
 
-        question = response.get("results")[0]["question"].replace("&quot", "'")
+        question = html.unescape(response.get("results")[0]["question"])
         
-        answer = response.get("results")[0]["correct_answer"]
-        answers_list = response.get("results")[0]["incorrect_answers"]
+        answer = html.unescape(response.get("results")[0]["correct_answer"])
+        answers_list = html.unescape(response.get("results")[0]["incorrect_answers"])
         answers_list.append(answer)
         random.shuffle(answers_list)
     
-        # print(answers_list)
+        # creates an embed for the question
         embed = discord.Embed(title=question, color=0x4825ba)
         embed.add_field(name="A", value=answers_list[0], inline=False)
         embed.add_field(name="B", value=answers_list[1], inline=False)

@@ -45,17 +45,26 @@ class Quiz(commands.Cog):
         answers_list = response.get("results")[0]["incorrect_answers"]
         answers_list.append(answer)
         random.shuffle(answers_list)
-        
-        print(answers_list)
+    
         # print(answers_list)
-        await ctx.send(f"{question} Is it a.{answers_list[0]}, b.{answers_list[1]}, c.{answers_list[2]}, d.{answers_list[3]}?") 
+        embed = discord.Embed(title=question, color=0x4825ba)
+        embed.add_field(name="A", value=answers_list[0], inline=False)
+        embed.add_field(name="B", value=answers_list[1], inline=False)
+        embed.add_field(name="C", value=answers_list[2], inline=False)
+        embed.add_field(name="D", value=answers_list[3], inline=False)
+        await ctx.send(embed = embed) 
 
         client_ans = await self.client.wait_for('message', timeout=120.0)
+        correct =""
 
-        if client_ans.content.lower() == answer.lower():
+        for field in embed.fields:
+            if field.value == answer:
+                correct += field.name
+
+        if client_ans.content.lower() == correct.lower():
             await ctx.send("yowm spot on")
         else:
-            await ctx.send("Yam nearly there but no ya wrong")
+            await ctx.send(f"Yam nearly there but no ya wrong it was {correct}")
 
 async def setup(client):
     await client.add_cog(Quiz(client))

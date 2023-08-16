@@ -9,7 +9,7 @@ class Quiz(commands.Cog):
         self.client = client 
 
     
-
+    # asks a true or false question
     @commands.command()
     async def true_false(self, ctx):
         difficulty = ctx.message.content.split(" ")[1] if len(ctx.message.content.split(" ")) == 2  else "medium"
@@ -22,7 +22,7 @@ class Quiz(commands.Cog):
         print(answer)
         
         # wait for the answer
-        client_ans = await self.client.wait_for('message', timeout=60.0)
+        client_ans = await self.client.wait_for('message', timeout=120.0)
         
         #checks if you got the answer correct
         if client_ans.content.lower() == answer.lower():
@@ -32,7 +32,8 @@ class Quiz(commands.Cog):
 
     @commands.command()
     async def multiple_choice(self, ctx):
-        URL = f""
+        # url_params = ""
+        URL = f"https://opentdb.com/api.php?amount=1&type=multiple"
 
 
 async def setup(client):

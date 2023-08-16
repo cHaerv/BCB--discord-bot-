@@ -16,7 +16,6 @@ intents.members = True
 
 client = commands.Bot(command_prefix = '!', intents=intents)
 
-
 #console log when running
 @client.event
 async def on_ready():
